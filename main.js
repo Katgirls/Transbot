@@ -1,12 +1,18 @@
 const mineflayer = require("mineflayer");
 const https = require("https");
 const Discord = require("discord.js");
-const { Client, GatewayIntentBits, EmbedBuilder } = Discord;
-const mfpf_pkg = require("mineflayer-pathfinder");
-const { pathfinder, Movements, goals } = mfpf_pkg;
-const { GoalNear, GoalFollow } = goals;
-const autoeat = require("mineflayer-auto-eat").plugin;
 const uuid = require("uuid-1345");
+
+const autoeat = require("mineflayer-auto-eat").plugin;
+const mfpf_pkg = require("mineflayer-pathfinder");
+
+const { pathfinder } = mfpf_pkg;
+const { Client, GatewayIntentBits, EmbedBuilder } = Discord;
+
+const farm = require("./farm.js");
+const chat = require("./chat.js");
+const commands = require("./commands.js");
+const config = require("./config.js");
 
 function setup() {
   const { MessageContent, GuildMessages, Guilds } = GatewayIntentBits;
@@ -22,12 +28,6 @@ function setup() {
   });
 
   var channel = -1;
-
-  const RANGE_GOAL = 1;
-
-  var do_look = true;
-
-  const whitelist = ["Vixy", "cat_yawn"];
 
   console.log("Does this print twice?");
 
@@ -48,10 +48,14 @@ function setup() {
 
     console.log("Trans rights!! (I spawned btw hehe) >w<");
 
+    farm.set_bot(bot);
+    commands.set_bot(bot);
+    chat.set_bot(bot);
+
     advertise();
 
     setInterval(() => {
-      if (do_look) {
+      if (config.do_look) {
         const entity = bot.nearestEntity((entity) => entity.type === "player");
         if (entity !== null) {
           bot.lookAt(entity.position.offset(0, 1.6, 0));
@@ -59,8 +63,14 @@ function setup() {
       }
     }, 25);
 
+    setInterval(() => {
+      if (config.do_farm) {
+        farm.perform();
+      }
+    }, 1000);
+
     // const interval = setInterval(advertise, 2700000);
-    const interval = setInterval(advertise, 21600000);
+    const interval = setInterval(advertise, 21600000); // Send the help message every 6 hours
   });
 
   bot.on("sleep", () => {
@@ -123,24 +133,11 @@ function setup() {
   });
 
   bot.on("chat", (username, message) => {
-    console.log("chat");
-
-    try {
-      if (username !== bot.username) {
-        const messageEmbed = new EmbedBuilder()
-          .setColor(0x0099ff)
-          .setTitle("New Message")
-          .setDescription(`[${username}] ${message}`)
-          .setTimestamp();
-        channel.send({ embeds: [messageEmbed] });
-      }
-    } catch (error) {
-      console.error(error.message);
-    }
+    chat.chat(username, message, channel);
   });
 
   bot.on("path_update", (r) => {
-    do_look = false;
+    config.do_look = false;
     const nodesPerTick = ((r.visitedNodes * 50) / r.time).toFixed(2);
     console.log(
       `I can get there in ${
@@ -152,8 +149,10 @@ function setup() {
   });
 
   bot.on("goal_reached", (goal) => {
-    console.log("Here I am! @ " + goal);
-    do_look = true;
+    console.log("Path goal reached.");
+    if (!config.do_farm) {
+      config.do_look = true;
+    }
   });
 
   bot.on("path_reset", (reason) => {
@@ -161,93 +160,7 @@ function setup() {
   });
 
   bot._client.on("playerChat", (data) => {
-    console.log("playerChat");
-    try {
-      const senderObj = JSON.parse(data.senderName);
-      const messageObj = JSON.parse(data.formattedMessage);
-      const extraArray = senderObj.extra;
-      const senderName = extraArray[0].hoverEvent.contents.text;
-      const message = messageObj.text;
-
-      console.log(senderName + ": " + message);
-
-      const defaultMove = new Movements(bot);
-
-      if (message === "*cat") {
-        sayCatFact();
-      }
-
-      if (message === "*fact") {
-        sayUselessFact();
-      }
-
-      if (message === "*stop") {
-        if (!whitelist.includes(senderName)) {
-          bot.chat("Sorry, you're not permitted to give me instructions");
-        } else {
-          bot._client.chat("Understood, I stopped my current task");
-          bot.pathfinder.stop();
-          do_look = true;
-        }
-      }
-
-      if (message === "*come") {
-        if (!whitelist.includes(senderName)) {
-          bot.chat("Sorry, you're not permitted to give me instructions");
-        } else {
-          const target = bot.players[senderName]?.entity;
-          if (!target) {
-            bot.chat("You're not within my visual range");
-            return;
-          }
-          bot.chat("Understood, I am now walking to you");
-          const { x: playerX, y: playerY, z: playerZ } = target.position;
-
-          bot.pathfinder.setMovements(defaultMove);
-          bot.pathfinder.setGoal(
-            new GoalNear(playerX, playerY, playerZ, RANGE_GOAL)
-          );
-        }
-      }
-
-      if (message === "*follow") {
-        if (!whitelist.includes(senderName)) {
-          bot.chat("Sorry, you're not permitted to give me instructions");
-        } else {
-          const target = bot.players[senderName]?.entity;
-          if (!target) {
-            bot.chat("You're not within my visual range");
-            return;
-          }
-          bot.chat("Understood, I am now walking to you");
-          const { x: playerX, y: playerY, z: playerZ } = target.position;
-
-          bot.pathfinder.setMovements(defaultMove);
-          bot.pathfinder.setGoal(new GoalFollow(target, 2), true);
-        }
-      }
-
-      if (message === "*sleep") {
-        goToSleep();
-      }
-
-      if (message === "*wakeup") {
-        wakeUp();
-      }
-
-      const messageEmbed = new EmbedBuilder()
-        .setColor(0x0099ff)
-        .setAuthor({
-          name: senderName,
-          iconURL: `https://mc-heads.net/avatar/${senderName}/`,
-          url: `https://namemc.com/${senderName}`,
-        })
-        .setDescription(message)
-        .setTimestamp();
-      channel.send({ embeds: [messageEmbed] });
-    } catch (error) {
-      console.error(error.message);
-    }
+    commands.chat(data, channel);
   });
 
   client.on("messageCreate", (message) => {
@@ -280,6 +193,24 @@ function setup() {
     channel.send({ embeds: [messageEmbed] });
   });
 
+  function dropAll() {
+    const excludedItems = ["bread"];
+    const item = bot.inventory
+      .items()
+      .find((item) => !excludedItems.includes(item.name));
+    if (item) {
+      bot
+        .tossStack(item)
+        .then(() => {
+          setTimeout(dropAll);
+        })
+        .catch((err) => {
+          console.log(err);
+          setTimeout(dropAll, 100);
+        });
+    }
+  }
+
   function advertise() {
     bot.chat(
       "Hi, I'm Transbot, for a list of my commands visit tenshi.gay/transbot"
@@ -304,8 +235,14 @@ function setup() {
             });
 
             res.once("end", () => {
-              const fact = JSON.parse(data).text;
-              bot._client.chat(fact); // MEOW
+              const fact = JSON.parse(data).fact;
+              if (fact.length > 254) {
+                bot._client.chat(
+                  "Sorry gang, the silly fact was too long (>255) to send :("
+                ); // HISS
+              } else {
+                bot._client.chat(fact); // MEOW
+              }
             });
           }
         })
@@ -337,7 +274,13 @@ function setup() {
 
             res.once("end", () => {
               const fact = JSON.parse(data).fact;
-              bot._client.chat(fact); // MEOW
+              if (fact.length > 254) {
+                bot._client.chat(
+                  "Sorry gang, the silly fact was too long (>255) to send :("
+                ); // HISS
+              } else {
+                bot._client.chat(fact); // MEOW
+              }
             });
           }
         })
@@ -375,7 +318,11 @@ function setup() {
   // // Log errors and kick reasons:
   bot.on("kicked", console.log);
   bot.on("error", console.log);
-  bot.on("end", setup);
+  bot.on("end", () => {
+    setTimeout(() => {
+      setup();
+    }, 15000); // 15 seconds
+  });
 
   client.login(process.env.TOKEN).catch(console.error);
 }
