@@ -17,11 +17,9 @@ const config = require("./config.js");
 function setup() {
   const { MessageContent, GuildMessages, Guilds } = GatewayIntentBits;
 
-  console.log(`Email: ${process.env.EMAIL}`);
-  console.log(`Password: ${process.env.PASSWORD}`);
-  console.log(`Token: ${process.env.TOKEN}`);
-
-  let channel_id = `1082122512357404732`;
+  console.log(`Email: ${config.ms_email}`);
+  console.log(`Password: ${config.ms_password}`);
+  console.log(`Token: ${config.bot_token}`);
 
   const client = new Client({
     intents: [Guilds, GuildMessages, MessageContent],
@@ -32,11 +30,11 @@ function setup() {
   console.log("Does this print twice?");
 
   const bot = mineflayer.createBot({
-    username: process.env.EMAIL,
-    password: process.env.PASSWORD,
+    username: config.ms_email,
+    password: config.ms_password,
     auth: "microsoft",
-    host: "play.fennet.rentals",
-    version: "1.19.3",
+    host: config.mc_server,
+    version: config.mc_version,
   });
 
   bot.loadPlugin(pathfinder);
@@ -111,7 +109,7 @@ function setup() {
 
   client.once("ready", (c) => {
     console.log(`Discord bot logged in as ${c.user.tag}`);
-    channel = client.channels.cache.get(channel_id);
+    channel = client.channels.cache.get(config.channel_id);
     if (!channel) {
       console.log(`I could not find the channel`);
       process.exit(1);
@@ -324,7 +322,7 @@ function setup() {
     }, 15000); // 15 seconds
   });
 
-  client.login(process.env.TOKEN).catch(console.error);
+  client.login(config.bot_token).catch(console.error);
 }
 
 setup();
