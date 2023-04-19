@@ -1,0 +1,17 @@
+{
+	"name": "Transbot",
+	"version": "1.0.0",
+	"description": "Half girl half robot",
+	"homepage": "https://github.com/FelixCharm/Transbot",
+	"license": "MIT",
+	"contributors": ["FelixCharm", "unilock"],
+	"main": "main.js",
+	"dependencies": {
+		"discord.js": "*",
+		"https": "*",
+		"mineflayer": "*",
+		"mineflayer-auto-eat": "*",
+		"mineflayer-pathfinder": "*",
+		"uuid-1345": "*"
+	}
+}
