@@ -49,9 +49,10 @@ function chat(data, channel) {
       if (!config.whitelist.includes(senderName)) {
         bot.chat("Sorry, you're not permitted to give me instructions");
       } else {
-        bot.chat("Feature currently disabled");
-        // config.do_farm = true;
-        // bot.chat("Now farming!");
+        // bot.chat("Feature currently disabled");
+        config.do_look = false;
+        config.do_farm = true;
+        bot.chat("Now farming!");
       }
     }
 
