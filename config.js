@@ -1,7 +1,8 @@
 // bot settings
-const ms_email = process.env.EMAIL;
-const ms_password = process.env.PASSWORD;
-const bot_token = process.env.TOKEN;
+const ms_email = "***REMOVED***";
+const ms_password = "***REMOVED***";
+const bot_token =
+  "***REMOVED***";
 const channel_id = `***REMOVED***`;
 
 // game settings
