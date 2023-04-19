@@ -17,10 +17,6 @@ const config = require("./config.js");
 function setup() {
   const { MessageContent, GuildMessages, Guilds } = GatewayIntentBits;
 
-  console.log(`Email: ${process.env.EMAIL}`);
-  console.log(`Password: ${process.env.PASSWORD}`);
-  console.log(`Token: ${process.env.TOKEN}`);
-
   let channel_id = `***REMOVED***`;
 
   const client = new Client({
@@ -29,11 +25,11 @@ function setup() {
 
   var channel = -1;
 
-  console.log("Does this print twice?");
+  console.log("Starting...");
 
   const bot = mineflayer.createBot({
-    username: process.env.EMAIL,
-    password: process.env.PASSWORD,
+    username: config.EMAIL,
+    password: config.PASSWORD,
     auth: "microsoft",
     host: "play.fennet.rentals",
     version: "1.19.3",
@@ -67,7 +63,7 @@ function setup() {
       if (config.do_farm) {
         farm.perform();
       }
-    }, 1000);
+    }, 250);
 
     // const interval = setInterval(advertise, 2700000);
     const interval = setInterval(advertise, 21600000); // Send the help message every 6 hours
@@ -324,7 +320,7 @@ function setup() {
     }, 15000); // 15 seconds
   });
 
-  client.login(process.env.TOKEN).catch(console.error);
+  client.login(config.TOKEN).catch(console.error);
 }
 
 setup();
