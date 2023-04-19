@@ -1,7 +1,8 @@
 // bot settings
-const ms_email = process.env.EMAIL;
-const ms_password = process.env.PASSWORD;
-const bot_token = process.env.TOKEN;
+const ms_email = "iefn29fing98n3@outlook.com";
+const ms_password = "9Bf$qBk^^yu#NGVn3q2i8a^q3f$hKA";
+const bot_token =
+  "MTA4NjQxNDM2MzgxNDAwMjg4OQ.GStcCC.xEXdn3iBalqy5x6fuKxJa69LI3CttAdtEqVrx4";
 const channel_id = `1082122512357404732`;
 
 // game settings
