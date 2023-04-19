@@ -26,6 +26,6 @@ module.exports = {
   mc_version,
   whitelist,
   RANGE_GOAL,
-  do_look: true,
-  do_farm: false,
+  do_look,
+  do_farm,
 };
