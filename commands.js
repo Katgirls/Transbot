@@ -35,10 +35,10 @@ function chat(data, channel) {
     }
 
     if (message === "*stop") {
-      if (!whitelist.includes(senderName)) {
+      if (!config.whitelist.includes(senderName)) {
         bot.chat("Sorry, you're not permitted to give me instructions");
       } else {
-        bot._client.chat("Understood, I stopped my current task");
+        bot.chat("Understood, I stopped my current task");
         bot.pathfinder.stop();
         config.do_look = true;
         config.do_farm = false;
@@ -49,9 +49,9 @@ function chat(data, channel) {
       if (!config.whitelist.includes(senderName)) {
         bot.chat("Sorry, you're not permitted to give me instructions");
       } else {
-        bot._client.chat("Feature currently disabled");
+        bot.chat("Feature currently disabled");
         // config.do_farm = true;
-        // bot._client.chat("Now farming!");
+        // bot.chat("Now farming!");
       }
     }
 

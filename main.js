@@ -166,7 +166,7 @@ function setup() {
   client.on("messageCreate", (message) => {
     if (message.channel.id !== channel.id) return;
     if (message.author.id === client.user.id) return;
-    bot._client.chat(
+    bot.chat(
       `${message.author.username}#${message.author.discriminator}: ${message.content}`
     );
   });
@@ -222,7 +222,7 @@ function setup() {
       https
         .get("https://uselessfacts.jsph.pl/api/v2/facts/random", (res) => {
           if (res.statusCode !== 200) {
-            bot._client.chat(
+            bot.chat(
               "Sorry, I Failed to fetch the information from the API :("
             );
           } else {
@@ -237,11 +237,11 @@ function setup() {
             res.once("end", () => {
               const fact = JSON.parse(data).fact;
               if (fact.length > 254) {
-                bot._client.chat(
+                bot.chat(
                   "Sorry gang, the silly fact was too long (>255) to send :("
                 ); // HISS
               } else {
-                bot._client.chat(fact); // MEOW
+                bot.chat(fact); // MEOW
               }
             });
           }
@@ -260,7 +260,7 @@ function setup() {
         .get("https://catfact.ninja/fact", (res) => {
           //Getting a little silly wid it >:3
           if (res.statusCode !== 200) {
-            bot._client.chat(
+            bot.chat(
               "Sorry, I Failed to fetch the information from the API :("
             ); // Cry to chat
           } else {
@@ -275,11 +275,11 @@ function setup() {
             res.once("end", () => {
               const fact = JSON.parse(data).fact;
               if (fact.length > 254) {
-                bot._client.chat(
+                bot.chat(
                   "Sorry gang, the silly fact was too long (>255) to send :("
                 ); // HISS
               } else {
-                bot._client.chat(fact); // MEOW
+                bot.chat(fact); // MEOW
               }
             });
           }
