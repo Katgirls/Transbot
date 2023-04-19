@@ -27,7 +27,7 @@ function setup() {
 
   var channel = -1;
 
-  console.log("Does this print twice?");
+  console.log("Starting...");
 
   const bot = mineflayer.createBot({
     username: config.ms_email,
@@ -65,7 +65,7 @@ function setup() {
       if (config.do_farm) {
         farm.perform();
       }
-    }, 1000);
+    }, 250);
 
     // const interval = setInterval(advertise, 2700000);
     const interval = setInterval(advertise, 21600000); // Send the help message every 6 hours
