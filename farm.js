@@ -59,27 +59,6 @@ async function perform () {
     toHarvests = blocksToHarvest()
     console.log(toHarvests.length)
 
-    // Sort the toHarvests array by distance (to us)
-    if (toHarvests && toHarvests.length > 0) {
-      // Pick the first block in the array as the reference block
-      const refBlock = toHarvests[0]
-
-      // Sort the rest of the blocks based on their distance to the reference block
-      toHarvests.slice(1).sort((a, b) => {
-        if (!a || !b) return 0
-        // Calculate the distance from the reference block to block `a`
-        const distA = refBlock.distanceTo(a)
-        // Calculate the distance from the reference block to block `b`
-        const distB = refBlock.distanceTo(b)
-        // Return the delta, negative if 'a' is closer,
-        // positive if 'b' is closer, and zero if they are the same distance
-        return distA - distB
-      })
-    } else {
-      bot.chat('No blocks to harvest.')
-      return
-    }
-
     for (const blockPos of toHarvests) {
       const block = bot.blockAt(blockPos)
 
@@ -101,12 +80,46 @@ async function perform () {
       }
     }
 
-    console.log(toHarvests)
+    // THANKS CHATGPT
+    /*
+    Here's how the algorithm works:
+
+    Pick an arbitrary starting block and add it to the sortedBlocks array.
+    Find the nearest block to the last block in the sortedBlocks array, remove it from the toHarvests array, and add it to the sortedBlocks array.
+    Repeat step 2 until there are no blocks left in the toHarvests array.
+    The resulting sortedBlocks array will contain the blocks in the order that the bot should harvest them to minimize the walking distance. The bot then walks to and harvests each block in the sortedBlocks array.
+    */
+
+    let sortedBlocks = null
+
+    // Sort the toHarvests array by distance (to us)
+    if (toHarvests && toHarvests.length > 0) {
+      // Sort the blocks using a nearest-neighbor algorithm
+      sortedBlocks = [toHarvests.shift()]
+      while (toHarvests.length > 0) {
+        let nearestBlock
+        let nearestDistance = Infinity
+        for (const block of toHarvests) {
+          const distance = sortedBlocks[sortedBlocks.length - 1].distanceTo(block)
+          if (distance < nearestDistance) {
+            nearestBlock = block
+            nearestDistance = distance
+          }
+        }
+        sortedBlocks.push(nearestBlock)
+        toHarvests.splice(toHarvests.indexOf(nearestBlock), 1)
+      }
+    } else {
+      bot.chat('No blocks to harvest.')
+      return
+    }
+
+    console.log(sortedBlocks)
 
     console.log('Start farming.')
 
-    for (let i = 0; i < toHarvests.length; i++) {
-      const block = toHarvests[i]
+    for (let i = 0; i < sortedBlocks.length; i++) {
+      const block = sortedBlocks[i]
 
       if (!block) {
         continue
@@ -135,7 +148,7 @@ async function perform () {
         cursorZ: 0.5
       })
 
-      await new Promise(resolve => setTimeout(resolve, 125))
+      await new Promise(resolve => setTimeout(resolve, 50)) // 50 millis = 1 tick (assume 20tps)
     }
 
     bot.chat('Done farming!')
