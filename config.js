@@ -7,7 +7,7 @@ const botToken = '***REMOVED***'
 const channelId = '***REMOVED***'
 
 // game settings
-const mcServer = 'play.fennet.rentals'
+const mcServer = 'localhost'
 const mcPort = '25565'
 const mcVersion = '1.19.3'
 

@@ -7,6 +7,7 @@ const { GoalNear, GoalFollow } = goals
 
 const config = require('./config.js')
 const features = require('./features.js')
+const farm = require('./farm.js')
 
 let bot
 
@@ -66,9 +67,10 @@ function chat (data, channel) {
           }
         }
 
-        // tfw april does things weird af
+        // tfw april does things COOL af
         config.doLook = false
         config.doFarm = true
+        farm.perform()
         bot.chat('Now farming!')
       }
     }
