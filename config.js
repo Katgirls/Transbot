@@ -13,6 +13,8 @@ const mcVersion = '1.19.3'
 
 // in-game settings
 const whitelist = ['Vixy', 'cat_yawn', 'Egirl39', 'AK50']
+const dropBlacklist = ['bread']
+const hoeItems = ['netherite_hoe', 'diamond_hoe', 'golden_hoe', 'iron_hoe', 'stone_hoe', 'wooden_hoe']
 const RANGE_GOAL = 1
 
 // not constants
@@ -35,6 +37,8 @@ module.exports = {
   mcPort,
   mcVersion,
   whitelist,
+  dropBlacklist: dropBlacklist.concat(hoeItems),
+  hoeItems,
   RANGE_GOAL,
   doLook,
   doFarm,
