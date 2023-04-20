@@ -36,6 +36,8 @@ function blocksToHarvest () {
 }
 
 async function perform () {
+  const Item = require('prismarine-item')(bot.registry)
+
   try {
     let toHarvests = null
     toHarvests = blocksToHarvest()
@@ -59,7 +61,7 @@ async function perform () {
         bot._client.write('block_place', {
           location: block,
           direction: 0,
-          hand: 0,
+          heldItem: Item.toNotch(bot.heldItem),
           cursorX: 0.5,
           cursorY: 0.5,
           cursorZ: 0.5

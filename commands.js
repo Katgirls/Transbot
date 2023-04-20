@@ -52,17 +52,37 @@ function chat (data, channel) {
         bot.chat('Sorry, you\'re not permitted to give me instructions')
       } else {
         // bot.chat('Feature currently disabled');
+
+        const inventory = bot.inventory.items()
+
+        /* eslint-disable no-labels */
+        loopHoeItems:
+        for (const hoe of config.hoeItems) {
+          for (const item of inventory) {
+            if (item.name === hoe) {
+              bot.equip(item, 'hand')
+              break loopHoeItems
+            }
+          }
+        }
+
+        // tfw april does things weird af
         config.doLook = false
         config.doFarm = true
         bot.chat('Now farming!')
       }
     }
 
-    if (message === '*dropall') {
+    if (message.startsWith('*drop')) {
+      let dropAll = false
+
       if (!config.whitelist.includes(senderName)) {
         bot.chat('Sorry, you\'re not permitted to give me instructions')
       } else {
-        features.dropAll()
+        if (message === '*dropall') {
+          dropAll = true
+        }
+        features.drop(dropAll)
       }
     }
 
