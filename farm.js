@@ -1,15 +1,12 @@
-const mfpf_pkg = require("mineflayer-pathfinder");
+const mfpfPkg = require('mineflayer-pathfinder')
 
-const { goals } = mfpf_pkg;
-const { GoalNear } = goals;
-const { Vec3 } = require("vec3");
+const { goals } = mfpfPkg
+const { GoalNear } = goals
 
-const config = require("./config.js");
+let bot
 
-let bot;
-
-function set_bot(_bot) {
-  bot = _bot;
+function setBot (_bot) {
+  bot = _bot
 }
 
 // function blockToSow(bot) {
@@ -18,13 +15,13 @@ function set_bot(_bot) {
 //     matching: bot.registry.blocksByName.farmland.id,
 //     maxDistance: 50,
 //     useExtraInfo: (block) => {
-//       const blockAbove = bot.blockAt(block.position.offset(0, 1, 0));
-//       return !blockAbove || blockAbove.type === 0;
+//       const blockAbove = bot.blockAt(block.position.offset(0, 1, 0))
+//       return !blockAbove || blockAbove.type === 0
 //     },
-//   });
+//   })
 // }
 
-function blocksToHarvest() {
+function blocksToHarvest () {
   return bot.findBlocks({
     point: bot.entity.position,
     maxDistance: 40,
@@ -33,17 +30,15 @@ function blocksToHarvest() {
         block &&
         block.type === bot.registry.blocksByName.wheat.id &&
         block.metadata === 7
-      );
+      )
     }
-  });
+  })
 }
 
-async function perform() {
-  const Item = require("prismarine-item")(bot.registry);
-
+async function perform () {
   try {
-    var toHarvests = null;
-    toHarvests = blocksToHarvest();
+    let toHarvests = null
+    toHarvests = blocksToHarvest()
 
     if (toHarvests) {
       for (const block of toHarvests) {
@@ -55,10 +50,10 @@ async function perform() {
               block.z,
               1
             )
-          );
+          )
         }
 
-        console.log(block);
+        console.log(block)
 
         // it's faster to send our own packets
         bot._client.write('block_place', {
@@ -68,12 +63,12 @@ async function perform() {
           cursorX: 0.5,
           cursorY: 0.5,
           cursorZ: 0.5
-        });
+        })
       }
     }
   } catch (e) {
-    console.log(e);
+    console.log(e)
   }
 }
 
-module.exports = { set_bot, perform };
+module.exports = { setBot, perform }
