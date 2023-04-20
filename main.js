@@ -53,17 +53,16 @@ function setup () {
 
     setInterval(() => {
       if (config.doLook) {
-        bot.lookAt(bot
-          .nearestEntity((entity) => entity.type === 'player')
-          ?.position
-          .offset(0, 1.6, 0)
-        )
+        const entity = bot.nearestEntity((entity) => entity.type === 'player')
+        if (entity !== null) {
+          bot.lookAt(entity.position.offset(0, 1.6, 0))
+        }
       }
     }, 25)
 
     setInterval(() => {
       if (config.doFarm) {
-        farm.perform()
+        config.doLook = false
       }
     }, 250)
 

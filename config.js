@@ -7,7 +7,7 @@ const botToken = 'MTA4NjQxNDM2MzgxNDAwMjg4OQ.GStcCC.xEXdn3iBalqy5x6fuKxJa69LI3Ct
 const channelId = '1082122512357404732'
 
 // game settings
-const mcServer = 'play.fennet.rentals'
+const mcServer = 'localhost'
 const mcPort = '25565'
 const mcVersion = '1.19.3'
 
