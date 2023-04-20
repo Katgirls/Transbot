@@ -6,6 +6,7 @@ const { Movements, goals } = mfpf_pkg;
 const { GoalNear, GoalFollow } = goals;
 
 const config = require("./config.js");
+const features = require("./features.js");
 
 let bot;
 
@@ -28,11 +29,11 @@ function chat(data, channel) {
     const defaultMove = new Movements(bot);
 
     if (message === "*cat") {
-      sayCatFact();
+      features.sayCatFact();
     }
 
     if (message === "*fact") {
-      sayUselessFact();
+      features.sayUselessFact();
     }
 
     if (message === "*stop") {
@@ -61,7 +62,7 @@ function chat(data, channel) {
       if (!config.whitelist.includes(senderName)) {
         bot.chat("Sorry, you're not permitted to give me instructions");
       } else {
-        dropAll();
+        features.dropAll();
       }
     }
 
@@ -102,11 +103,11 @@ function chat(data, channel) {
     }
 
     if (message === "*sleep") {
-      goToSleep();
+      features.goToSleep();
     }
 
     if (message === "*wakeup") {
-      wakeUp();
+      features.wakeUp();
     }
 
     const messageEmbed = new EmbedBuilder()
