@@ -42,9 +42,6 @@ function setup () {
   bot.loadPlugin(autoeat)
 
   bot.once('spawn', () => {
-    // console.log(bot._client.profileKeys)
-    // console.log(bot._client.cipher)
-
     console.log('Trans rights!! (I spawned btw hehe) >w<')
 
     farm.setBot(bot)
