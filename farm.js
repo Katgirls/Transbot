@@ -3,8 +3,6 @@ const mfpfPkg = require('mineflayer-pathfinder')
 const { goals } = mfpfPkg
 const { GoalNear } = goals
 
-const config = require('./config.js')
-
 let bot
 
 function setBot (_bot) {
@@ -39,22 +37,6 @@ function blocksToHarvest () {
 
 async function perform () {
   const Item = require('prismarine-item')(bot.registry)
-
-  // TODO: prioritize hoes with Fortune (more drops)
-  if (!config.hoeItems.includes(bot.heldItem?.name)) {
-    const inventory = bot.inventory.items()
-
-    /* eslint-disable no-labels */
-    loopHoeItems:
-    for (const hoe of config.hoeItems) {
-      for (const item of inventory) {
-        if (item.name === hoe) {
-          bot.equip(item, 'hand')
-          break loopHoeItems
-        }
-      }
-    }
-  }
 
   try {
     let toHarvests = null
