@@ -34,6 +34,7 @@ function setup() {
     password: config.ms_password,
     auth: "microsoft",
     host: config.mc_server,
+    port: config.mc_port,
     version: config.mc_version,
   });
 
@@ -111,7 +112,7 @@ function setup() {
     console.log(`Discord bot logged in as ${c.user.tag}`);
     channel = client.channels.cache.get(config.channel_id);
     if (!channel) {
-      console.log(`I could not find the channel`);
+      console.log("I could not find the channel");
       process.exit(1);
     }
   });

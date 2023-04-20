@@ -16,11 +16,12 @@ function set_bot(_bot) {
 function chat(data, channel) {
   console.log("playerChat");
   try {
+    // something is very wrong here :(
+    // why is the entire message in senderName!?
     const senderObj = JSON.parse(data.senderName);
-    const messageObj = JSON.parse(data.formattedMessage);
     const extraArray = senderObj.extra;
     const senderName = extraArray[0].hoverEvent.contents.text;
-    const message = messageObj.text;
+    const message = extraArray[3].extra[0].text;
 
     console.log(senderName + ": " + message);
 
