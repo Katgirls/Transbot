@@ -21,6 +21,13 @@ const RANGE_GOAL = 1
 let doLook = true
 let doFarm = false
 
+// feature settings
+const pearls = {
+  April: { x: 992, y: 43, z: 1880 },
+  Kate: { x: 994, y: 43, z: 1880 },
+  ion: { x: 997, y: 43, z: 1885 }
+}
+
 module.exports = {
   msEmail,
   msPassword,
@@ -34,5 +41,6 @@ module.exports = {
   hoeItems,
   RANGE_GOAL,
   doLook,
-  doFarm
+  doFarm,
+  pearls
 }
