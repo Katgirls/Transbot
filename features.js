@@ -1,26 +1,25 @@
 const https = require('https')
 
+const config = require('./config.js')
+
 let bot
 
 function setBot (_bot) {
   bot = _bot
 }
 
-function dropAll () {
-  const excludedItems = ['bread']
-  const item = bot.inventory
-    .items()
-    .find((item) => !excludedItems.includes(item.name))
-  if (item) {
-    bot
-      .tossStack(item)
-      .then(() => {
-        setTimeout(dropAll)
-      })
-      .catch((err) => {
-        console.log(err)
-        setTimeout(dropAll, 100)
-      })
+async function drop (dropAll) {
+  let inventory = bot.inventory.items()
+
+  if (!dropAll) {
+    inventory = inventory.filter((item) => !config.dropBlacklist.includes(item.name))
+  }
+
+  if (inventory) {
+    for (const item of inventory) {
+      bot.tossStack(item)
+      await new Promise((_resolve) => setTimeout(_resolve))
+    }
   }
 }
 
@@ -120,7 +119,7 @@ async function wakeUp () {
 
 module.exports = {
   setBot,
-  dropAll,
+  drop,
   sayUselessFact,
   sayCatFact,
   goToSleep,
