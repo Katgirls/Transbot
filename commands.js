@@ -53,17 +53,15 @@ function chat (data, channel) {
       } else {
         // bot.chat('Feature currently disabled');
 
-        if (!config.hoeItems.includes(bot.heldItem?.name)) {
-          const inventory = bot.inventory.items()
+        const inventory = bot.inventory.items()
 
-          /* eslint-disable no-labels */
-          loopHoeItems:
-          for (const hoe of config.hoeItems) {
-            for (const item of inventory) {
-              if (item.name === hoe) {
-                bot.equip(item, 'hand')
-                break loopHoeItems
-              }
+        /* eslint-disable no-labels */
+        loopHoeItems:
+        for (const hoe of config.hoeItems) {
+          for (const item of inventory) {
+            if (item.name === hoe) {
+              bot.equip(item, 'hand')
+              break loopHoeItems
             }
           }
         }
