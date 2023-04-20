@@ -1,3 +1,5 @@
+/* eslint-disable prefer-const */
+
 // bot settings
 const msEmail = 'iefn29fing98n3@outlook.com'
 const msPassword = '9Bf$qBk^^yu#NGVn3q2i8a^q3f$hKA'
@@ -11,6 +13,7 @@ const mcVersion = '1.19.3'
 
 // in-game settings
 const whitelist = ['Vixy', 'cat_yawn', 'Egirl39', 'AK50']
+const dropBlacklist = ['bread']
 const RANGE_GOAL = 1
 
 // not constants
@@ -26,6 +29,7 @@ module.exports = {
   mcPort,
   mcVersion,
   whitelist,
+  dropBlacklist,
   RANGE_GOAL,
   doLook,
   doFarm

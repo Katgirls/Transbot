@@ -58,11 +58,16 @@ function chat (data, channel) {
       }
     }
 
-    if (message === '*dropall') {
+    if (message.startsWith('*drop')) {
+      let dropAll = false
+
       if (!config.whitelist.includes(senderName)) {
         bot.chat('Sorry, you\'re not permitted to give me instructions')
       } else {
-        features.dropAll()
+        if (message === '*dropall') {
+          dropAll = true
+        }
+        features.drop(dropAll)
       }
     }
 
