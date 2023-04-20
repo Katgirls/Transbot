@@ -109,6 +109,14 @@ function chat (data, channel) {
       features.wakeUp()
     }
 
+    if (message === '*loadpearl') {
+      if (!config.whitelist.includes(senderName)) {
+        bot.chat('Sorry, you\'re not permitted to give me instructions')
+      } else {
+        features.loadPearl(senderName)
+      }
+    }
+
     const messageEmbed = new EmbedBuilder()
       .setColor(0x0099ff)
       .setAuthor({
