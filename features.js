@@ -1,9 +1,20 @@
 const https = require('https')
 
+const config = require('./config.js')
+
+const mfpfPkg = require('mineflayer-pathfinder')
+
+const { Movements, goals } = mfpfPkg
+const { GoalNear } = goals
+
+const { Vec3 } = require('vec3')
+
 let bot
+let defaultMove
 
 function setBot (_bot) {
   bot = _bot
+  defaultMove = new Movements(bot)
 }
 
 function dropAll () {
@@ -22,6 +33,46 @@ function dropAll () {
         setTimeout(dropAll, 100)
       })
   }
+}
+
+async function loadPearl (target) {
+  let blockData
+
+  switch (target) {
+    case '***REMOVED***':
+      blockData = new Vec3(config.pearls.April.x, config.pearls.April.y, config.pearls.April.z)
+      break
+    case '***REMOVED***':
+    case 'Egirl39':
+      blockData = new Vec3(config.pearls.ion.x, config.pearls.ion.y, config.pearls.ion.z)
+      break
+    case 'cat_yawn':
+      blockData = new Vec3(config.pearls.Kate.x, config.pearls.Kate.y, config.pearls.Kate.z)
+      break
+  }
+
+  if (bot.entity.position.distanceTo(blockData) > 3) {
+    bot.pathfinder.setMovements(defaultMove)
+    await bot.pathfinder.goto(
+      new GoalNear(
+        blockData.x,
+        blockData.y,
+        blockData.z,
+        3
+      )
+    )
+  }
+
+  console.log('Loading')
+
+  bot._client.write('block_place', {
+    location: blockData,
+    direction: 0,
+    hand: 0,
+    cursorX: 0,
+    cursorY: 1,
+    cursorZ: 0
+  })
 }
 
 function sayUselessFact () {
@@ -124,5 +175,6 @@ module.exports = {
   sayUselessFact,
   sayCatFact,
   goToSleep,
-  wakeUp
+  wakeUp,
+  loadPearl
 }
