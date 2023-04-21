@@ -6,6 +6,7 @@ const { GoalNear } = goals
 const config = require('./config.js')
 
 let bot
+const maxBlockDistance = 6
 
 const positionsToRemove = [
   { x: -1, y: 0, z: -1 },
@@ -43,9 +44,30 @@ function blocksToHarvest () {
         block.metadata === 7
       )
     },
-    maxDistance: 64,
+    maxDistance: 69,
     count: 420
   })
+
+  for (const blockPos of blocks) {
+    const block = bot.blockAt(blockPos)
+
+    if (!block) { // IDK how this would trigger but...
+      continue
+    }
+
+    for (const pos of positionsToRemove) {
+      const removePos = blockPos.plus(pos)
+      for (let i = 0; i < blocks.length; i++) {
+        const blockPos = blocks[i]
+
+        if (blockPos.equals(removePos)) {
+          console.log(i)
+          blocks.splice(i, 1)
+          break
+        }
+      }
+    }
+  }
 
   console.log(blocks.length)
   return blocks
@@ -58,27 +80,6 @@ async function perform () {
     let toHarvests = null
     toHarvests = blocksToHarvest()
     console.log(toHarvests.length)
-
-    for (const blockPos of toHarvests) {
-      const block = bot.blockAt(blockPos)
-
-      if (!block) { // IDK how this would trigger but...
-        continue
-      }
-
-      for (const pos of positionsToRemove) {
-        const removePos = blockPos.plus(pos)
-        for (let i = 0; i < toHarvests.length; i++) {
-          const blockPos = toHarvests[i]
-
-          if (blockPos.equals(removePos)) {
-            console.log(i)
-            toHarvests.splice(i, 1)
-            break
-          }
-        }
-      }
-    }
 
     // THANKS CHATGPT
     /*
@@ -125,13 +126,13 @@ async function perform () {
         continue
       }
 
-      if (bot.entity.position.distanceTo(block) > 3) {
+      if (bot.entity.position.distanceTo(block) > maxBlockDistance) {
         await bot.pathfinder.goto(
           new GoalNear(
             block.x,
             block.y,
             block.z,
-            1
+            0
           )
         )
       }
@@ -148,12 +149,16 @@ async function perform () {
         cursorZ: 0.5
       })
 
-      await new Promise(resolve => setTimeout(resolve, 50)) // 50 millis = 1 tick (assume 20tps)
+      // await new Promise(resolve => setTimeout(resolve, 5)) // 50 millis = 1 tick (assume 20tps)
     }
 
-    bot.chat('Done farming!')
-    config.doFarm = false
-    config.doLook = true
+    if (blocksToHarvest().length > 0) {
+      perform()
+    } else {
+      bot.chat('Done farming!')
+      config.doFarm = false
+      config.doLook = true
+    }
   } catch (e) {
     console.log(e)
   }
