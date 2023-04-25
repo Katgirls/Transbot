@@ -4,6 +4,7 @@ const uuid = require('uuid-1345')
 
 const autoeat = require('mineflayer-auto-eat').plugin
 const mfpfPkg = require('mineflayer-pathfinder')
+const inventoryViewer = require('mineflayer-web-inventory')
 
 const { pathfinder } = mfpfPkg
 const { Client, GatewayIntentBits, EmbedBuilder } = Discord
@@ -67,6 +68,8 @@ function setup () {
     }, 250)
 
     setInterval(advertise, 21600000) // Send the help message every 6 hours
+
+    inventoryViewer(bot)
   })
 
   bot.on('sleep', () => {

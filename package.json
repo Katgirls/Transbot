@@ -15,6 +15,7 @@
 		"mineflayer": "*",
 		"mineflayer-auto-eat": "*",
 		"mineflayer-pathfinder": "*",
+		"mineflayer-web-inventory": "^1.8.4",
 		"uuid-1345": "*"
 	},
 	"devDependencies": {

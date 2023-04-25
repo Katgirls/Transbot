@@ -16,7 +16,6 @@ function setBot (_bot) {
 }
 
 function chat (data, channel) {
-  console.log('playerChat')
   try {
     // something is very wrong here :(
     // why is the entire message in senderName!?

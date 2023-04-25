@@ -8,8 +8,6 @@ function setBot (_bot) {
 }
 
 function chat (username, message, channel) {
-  console.log('chat')
-
   try {
     if (username !== bot.username) {
       const messageEmbed = new EmbedBuilder()
