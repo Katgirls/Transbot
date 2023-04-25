@@ -68,8 +68,10 @@ function setup () {
     }, 250)
 
     setInterval(advertise, 21600000) // Send the help message every 6 hours
-
-    inventoryViewer(bot)
+    const options = {
+      webPath: '/transbot'
+    }
+    inventoryViewer(bot, options)
   })
 
   bot.on('sleep', () => {
