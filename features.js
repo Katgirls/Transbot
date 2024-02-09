@@ -36,10 +36,10 @@ async function loadPearl (target) {
   let blockData
 
   switch (target) {
-    case '***REMOVED***':
+    case 'gone1':
       blockData = new Vec3(config.pearls.April.x, config.pearls.April.y, config.pearls.April.z)
       break
-    case '***REMOVED***':
+    case 'gone2':
     case 'Egirl39':
       blockData = new Vec3(config.pearls.ion.x, config.pearls.ion.y, config.pearls.ion.z)
       break
