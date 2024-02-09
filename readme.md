@@ -9,7 +9,7 @@ To get started, you will need to have Node.js installed. You can download the la
 Once you have Node.js installed, you can clone the Transbot repository using Git:
 
 ```
-git clone https://github.com/FelixCharm/Transbot.git
+git clone https://github.com/Katgirls/Transbot.git
 ```
 
 After cloning the repository, navigate to the project directory and install the required dependencies using npm:
