@@ -194,7 +194,7 @@ function setup () {
 
   function advertise () {
     bot.chat(
-      'Hi, I\'m Transbot, for a list of my commands visit tenshi.gay/transbot'
+      'Hi, I\'m Transbot, for a list of my commands visit transgirl.dev/transbot'
     )
   }
 
