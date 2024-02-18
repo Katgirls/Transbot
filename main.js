@@ -18,10 +18,6 @@ const features = require('./features.js')
 function setup () {
   const { MessageContent, GuildMessages, Guilds } = GatewayIntentBits
 
-  console.log(`Email: ${config.msEmail}`)
-  console.log(`Password: ${config.msPassword}`)
-  console.log(`Token: ${config.botToken}`)
-
   const client = new Client({
     intents: [Guilds, GuildMessages, MessageContent]
   })
